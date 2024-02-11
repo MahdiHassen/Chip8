@@ -265,7 +265,7 @@ int main(int argc, char **argv) {
 
             lastCycleTime = currentTime;
         } else {
-            SDL_Delay(1); 
+            SDL_Delay(2); 
         } 
 }
         
