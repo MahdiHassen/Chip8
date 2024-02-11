@@ -7,9 +7,9 @@
             "command": "/usr/bin/clang",
             "args": [
                 "-g",
-                "${workspaceFolder}/test.c",
+                "${workspaceFolder}/main.c",
                 "-o",
-                "${workspaceFolder}/test.out",
+                "${workspaceFolder}/chip8.out",
                 "-lSDL2"
             ],
             "group": {
