@@ -43,6 +43,7 @@ int main() {
             }
         }
     }
+    
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
