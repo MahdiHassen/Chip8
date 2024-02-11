@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "build hello world",
+            "command": "/usr/bin/clang",
+            "args": [
+                "-g",
+                "${workspaceFolder}/test.c",
+                "-o",
+                "${workspaceFolder}/test.out",
+                "-lSDL2"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
