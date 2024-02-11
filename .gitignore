@@ -5,3 +5,4 @@ test.out.dSYM/Contents/Resources/Relocations/aarch64/test.out.yml
 test.out
 .vscode/settings.json
 chip8.out.dSYM/Contents
+chip8.out.dSYM
