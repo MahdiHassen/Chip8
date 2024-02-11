@@ -1,11 +1,12 @@
 #include <SDL2/SDL.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <time.h>
 
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
-#define SCALE 15  // Scale the window, should be variable
-#define CLOCK_SPEED 1000 // 1MHz
+#define SCALE 17  // Scale the window, should be variable
+
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -173,11 +174,10 @@ void executeCycle() {
             // Handle opcodes starting with 0xF
             break;
         default:
-            printf("Error, Opcode isnt define:", opcode);
+            printf("Error, Opcode isnt defined");
             break;
     }
 }
-
 
 int setupGraphics() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -231,25 +231,22 @@ void displayGraphics() {
 
 int main(int argc, char **argv) {
    
-    int instuctionsPerCycle = CLOCK_SPEED; //1000 instructions per second, assuming each instucions takes 1 cycle
+//TODO: Make this easier to read, split into more functions
+//TODO: Add Finish opcode implementation
+//TODO: Add input handling
+//TODO: Add sound
 
     loadFont();
     loadROM("IBM Logo.ch8");
-
-    for (instuctionsPerCycle; instuctionsPerCycle > 0; instuctionsPerCycle--) { // Execute 1000 instructions
-        executeCycle();
-    }
-    SDL_Delay(1000); // Delay for 1s
-
-
-    if (!setupGraphics()) {
-        return 1;
-    }
-
-    //TODO: Implement the main loop
+    setupGraphics();
 
     SDL_Event event;
     int quit = 0;
+
+    const int cpuHz = 500; //CHIP-8 clock speed 500Hz
+    const uint32_t frameDelay = 1000 / cpuHz; // ms per instruction cycle
+
+    uint32_t lastCycleTime = SDL_GetTicks(); // Get the current time in milliseconds
 
     while (!quit) {
         while (SDL_PollEvent(&event)) {
@@ -257,11 +254,22 @@ int main(int argc, char **argv) {
                 quit = 1;
             }
         }
+        
+        uint32_t currentTime = SDL_GetTicks();
+        uint32_t elapsedTime = currentTime - lastCycleTime;
 
-        // Update graphics
-        drawGraphics();
-        displayGraphics();
-    }
+        if (elapsedTime >= frameDelay) { //if it's time to execute a cycle
+            executeCycle(); 
+            drawGraphics(); 
+            displayGraphics();
+
+            lastCycleTime = currentTime;
+        } else {
+            SDL_Delay(1); 
+        } 
+}
+        
+    
 
 
 

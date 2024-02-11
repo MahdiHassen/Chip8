@@ -2,11 +2,11 @@
 triple:          'arm64-apple-darwin'
 binary-path:     '/Users/mahdi/Desktop/Projects/Chip8/chip8.out'
 relocations:
-  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _loadFont, symObjAddr: 0x0, symBinAddr: 0x100003390, symSize: 0x7C }
-  - { offsetInCU: 0x3F, offset: 0x3F, size: 0x8, addend: 0x0, symName: _window, symObjAddr: 0x6F18, symBinAddr: 0x100008800, symSize: 0x0 }
-  - { offsetInCU: 0x69, offset: 0x69, size: 0x8, addend: 0x0, symName: _renderer, symObjAddr: 0x6F20, symBinAddr: 0x100008808, symSize: 0x0 }
-  - { offsetInCU: 0x93, offset: 0x93, size: 0x8, addend: 0x0, symName: _graphics, symObjAddr: 0x9BC, symBinAddr: 0x100008000, symSize: 0x0 }
-  - { offsetInCU: 0xD3, offset: 0xD3, size: 0x8, addend: 0x0, symName: _opcode, symObjAddr: 0x6F28, symBinAddr: 0x100008810, symSize: 0x0 }
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _loadFont, symObjAddr: 0x0, symBinAddr: 0x1000033A4, symSize: 0x7C }
+  - { offsetInCU: 0x3F, offset: 0x3F, size: 0x8, addend: 0x0, symName: _window, symObjAddr: 0x6F70, symBinAddr: 0x100008800, symSize: 0x0 }
+  - { offsetInCU: 0x69, offset: 0x69, size: 0x8, addend: 0x0, symName: _renderer, symObjAddr: 0x6F78, symBinAddr: 0x100008808, symSize: 0x0 }
+  - { offsetInCU: 0x93, offset: 0x93, size: 0x8, addend: 0x0, symName: _graphics, symObjAddr: 0x99C, symBinAddr: 0x100008000, symSize: 0x0 }
+  - { offsetInCU: 0xD3, offset: 0xD3, size: 0x8, addend: 0x0, symName: _opcode, symObjAddr: 0x6F80, symBinAddr: 0x100008810, symSize: 0x0 }
   - { offsetInCU: 0x101, offset: 0x101, size: 0x8, addend: 0x0, symName: _pc, symBinAddr: 0x100009826, symSize: 0x0 }
   - { offsetInCU: 0x116, offset: 0x116, size: 0x8, addend: 0x0, symName: _I, symBinAddr: 0x100008812, symSize: 0x0 }
   - { offsetInCU: 0x12B, offset: 0x12B, size: 0x8, addend: 0x0, symName: _sp, symBinAddr: 0x10000982A, symSize: 0x0 }
@@ -15,12 +15,12 @@ relocations:
   - { offsetInCU: 0x182, offset: 0x182, size: 0x8, addend: 0x0, symName: _memory, symBinAddr: 0x100008825, symSize: 0x0 }
   - { offsetInCU: 0x1A4, offset: 0x1A4, size: 0x8, addend: 0x0, symName: _delay_timer, symBinAddr: 0x100008824, symSize: 0x0 }
   - { offsetInCU: 0x1B9, offset: 0x1B9, size: 0x8, addend: 0x0, symName: _sound_timer, symBinAddr: 0x100009828, symSize: 0x0 }
-  - { offsetInCU: 0x858, offset: 0x858, size: 0x8, addend: 0x0, symName: _loadFont, symObjAddr: 0x0, symBinAddr: 0x100003390, symSize: 0x7C }
-  - { offsetInCU: 0x87C, offset: 0x87C, size: 0x8, addend: 0x0, symName: _loadROM, symObjAddr: 0x7C, symBinAddr: 0x10000340C, symSize: 0xD0 }
-  - { offsetInCU: 0x8BC, offset: 0x8BC, size: 0x8, addend: 0x0, symName: _fetchOpcode, symObjAddr: 0x14C, symBinAddr: 0x1000034DC, symSize: 0x44 }
-  - { offsetInCU: 0x8D1, offset: 0x8D1, size: 0x8, addend: 0x0, symName: _executeCycle, symObjAddr: 0x190, symBinAddr: 0x100003520, symSize: 0x460 }
-  - { offsetInCU: 0x9AB, offset: 0x9AB, size: 0x8, addend: 0x0, symName: _setupGraphics, symObjAddr: 0x5F0, symBinAddr: 0x100003980, symSize: 0x138 }
-  - { offsetInCU: 0x9C4, offset: 0x9C4, size: 0x8, addend: 0x0, symName: _drawGraphics, symObjAddr: 0x728, symBinAddr: 0x100003AB8, symSize: 0x124 }
-  - { offsetInCU: 0xA2E, offset: 0xA2E, size: 0x8, addend: 0x0, symName: _displayGraphics, symObjAddr: 0x84C, symBinAddr: 0x100003BDC, symSize: 0x1C }
-  - { offsetInCU: 0xA43, offset: 0xA43, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x868, symBinAddr: 0x100003BF8, symSize: 0x154 }
+  - { offsetInCU: 0x858, offset: 0x858, size: 0x8, addend: 0x0, symName: _loadFont, symObjAddr: 0x0, symBinAddr: 0x1000033A4, symSize: 0x7C }
+  - { offsetInCU: 0x87C, offset: 0x87C, size: 0x8, addend: 0x0, symName: _loadROM, symObjAddr: 0x7C, symBinAddr: 0x100003420, symSize: 0xD0 }
+  - { offsetInCU: 0x8BC, offset: 0x8BC, size: 0x8, addend: 0x0, symName: _fetchOpcode, symObjAddr: 0x14C, symBinAddr: 0x1000034F0, symSize: 0x44 }
+  - { offsetInCU: 0x8D1, offset: 0x8D1, size: 0x8, addend: 0x0, symName: _executeCycle, symObjAddr: 0x190, symBinAddr: 0x100003534, symSize: 0x44C }
+  - { offsetInCU: 0x9AB, offset: 0x9AB, size: 0x8, addend: 0x0, symName: _setupGraphics, symObjAddr: 0x5DC, symBinAddr: 0x100003980, symSize: 0x138 }
+  - { offsetInCU: 0x9C4, offset: 0x9C4, size: 0x8, addend: 0x0, symName: _drawGraphics, symObjAddr: 0x714, symBinAddr: 0x100003AB8, symSize: 0x124 }
+  - { offsetInCU: 0xA2E, offset: 0xA2E, size: 0x8, addend: 0x0, symName: _displayGraphics, symObjAddr: 0x838, symBinAddr: 0x100003BDC, symSize: 0x1C }
+  - { offsetInCU: 0xA43, offset: 0xA43, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x854, symBinAddr: 0x100003BF8, symSize: 0x148 }
 ...
