@@ -12,6 +12,21 @@ SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
 uint8_t graphics[SCREEN_HEIGHT][SCREEN_WIDTH] = {0}; // 64x32 pixels on the display, initialized with 0's but with 1 for test
+uint8_t keyboard[16] = {0}; // 16 keys, initialized with 0's
+uint8_t keyPressed = 0; // 0 if no key is pressed, 1 if a key is pressed
+
+/*
+
+Keyboard layout:
+
+Computer         Chip-8
+________        ________ 
+1 2 3 4         1 2 3 C
+q w e r   ==    4 5 6 D
+a s d f   ==    7 8 9 E
+z x c v         A 0 B F  
+
+*/
 
 uint16_t pc; // Program counter
 uint16_t I; // Index register
@@ -26,6 +41,33 @@ uint8_t delay_timer;
 uint8_t sound_timer;
 
 void loadFont(){ //loads font at 0x000
+
+
+/*
+
+Font data:                           #            Index in memory:
+_____________________________       ___      _____________________________
+0xF0, 0x90, 0x90, 0x90, 0xF0,       (0)      0x00, 0x01, 0x02, 0x03, 0x04
+0x20, 0x60, 0x20, 0x20, 0x70,       (1)      0x05, 0x06, 0x07, 0x08, 0x09
+0xF0, 0x10, 0xF0, 0x80, 0xF0,       (2)      0x0A, 0x0B, 0x0C, 0x0D, 0x0E
+0xF0, 0x10, 0xF0, 0x10, 0xF0,      (...)     0x0F, 0x10, 0x11, 0x12, 0x13
+0x90, 0x90, 0xF0, 0x10, 0x10,                0x14, 0x15, 0x16, 0x17, 0x18
+0xF0, 0x80, 0xF0, 0x10, 0xF0,                0x19, 0x1A, 0x1B, 0x1C, 0x1D
+0xF0, 0x80, 0xF0, 0x90, 0xF0,                0x1E, 0x1F, 0x20, 0x21, 0x22
+0xF0, 0x10, 0x20, 0x40, 0x40,                0x23, 0x24, 0x25, 0x26, 0x27
+0xF0, 0x90, 0xF0, 0x90, 0xF0,                0x28, 0x29, 0x2A, 0x2B, 0x2C
+0xF0, 0x90, 0xF0, 0x10, 0xF0,                0x2D, 0x2E, 0x2F, 0x30, 0x31
+0xF0, 0x90, 0xF0, 0x90, 0x90,                0x32, 0x33, 0x34, 0x35, 0x36
+0xE0, 0x90, 0xE0, 0x90, 0xE0,                0x37, 0x38, 0x39, 0x3A, 0x3B
+0xF0, 0x80, 0x80, 0x80, 0xF0,                0x3C, 0x3D, 0x3E, 0x3F, 0x40
+0xE0, 0x90, 0x90, 0x90, 0xE0,     (...)      0x41, 0x42, 0x43, 0x44, 0x45
+0xF0, 0x80, 0xF0, 0x80, 0xF0,      (E)       0x46, 0x47, 0x48, 0x49, 0x4A
+0xF0, 0x80, 0xF0, 0x80, 0x80,      (F)       0x4B, 0x4C, 0x4D, 0x4E, 0x4F
+
+
+*/
+
+
 
 uint8_t fontData[] = {
     0xF0, 0x90, 0x90, 0x90, 0xF0, //0
@@ -267,7 +309,6 @@ void executeCycle() {
             uint8_t random = rand() % 0xFF; // Generate a random number between 0 and 255
             V[(opcode & 0x0F00) >> 8] = random & (opcode & 0x00FF); // Set Vx to random & NN
             }
-
             break;
 
         case 0xD000:{
@@ -293,17 +334,118 @@ void executeCycle() {
         }
 
             break;
-        case 0xE000:
+        case 0xE000:{
             // Handle opcodes starting with 0xE
+            switch (opcode & 0x00FF) {
+                case 0x009E:{
+                    // Skip next instruction if key with the value of Vx is pressed 0xEX9E
+                    if (keyboard[V[(opcode & 0x0F00) >> 8]] != 0) {
+                        pc += 2;
+                    }
+                }
+                    break;
+
+                case 0x00A1:{
+                    // Skip next instruction if key with the value of Vx is not pressed 0xEXA1
+                    if (keyboard[V[(opcode & 0x0F00) >> 8]] == 0) {
+                        pc += 2;
+                    }
+                }
+                    break;
+            }
+        }
+
             break;
-        case 0xF000:
+        case 0xF000:{
             // Handle opcodes starting with 0xF
+            switch (opcode & 0x00FF) {
+                case 0x0007:{
+                    // Set Vx to the value of the delay timer 0xFX07
+                    V[(opcode & 0x0F00) >> 8] = delay_timer;
+                }
+                    break;
+
+                case 0x000A:{
+                    // Wait for a key press, store the value of the key in Vx 0xFX0A
+                    if (keyPressed) {
+                        for (int i = 0; i < 16; i++) {
+                            if (keyboard[i] != 0) {
+                                V[(opcode & 0x0F00) >> 8] = i;
+                                keyPressed = 0;
+                                break;
+                            }
+                        }
+                    } else {
+                        pc -= 2; // Repeat the cycle
+                    }
+                }
+                    break;
+
+                case 0x0015:{
+                    // Set the delay timer to Vx 0xFX15
+                    delay_timer = V[(opcode & 0x0F00) >> 8];
+                }
+                    break;
+
+                case 0x0018:{
+                    // Set the sound timer to Vx 0xFX18
+                    sound_timer = V[(opcode & 0x0F00) >> 8];
+                }
+                    break;
+
+                case 0x001E:{
+                    // Add Vx to I 0xFX1E
+                    I += V[(opcode & 0x0F00) >> 8];
+                }
+                    break;
+
+                case 0x0029:{
+                    // Set I to the location of the sprite for the character in Vx 0xFX29
+                    uint8_t fontChar = (V[(opcode & 0x0F00) >> 8] & 0x0F); //font memory starts at 0x0000
+                    I = fontChar * 5; //each character is 5 bytes long, 0 = 0x0000, 1 = 0x0005, 2 = 0x000A, etc.
+                }
+                    break;
+
+                case 0x0033:{
+                    // Store the binary-coded decimal representation of Vx at the addresses I, I+1, and I+2 0xFX33
+
+                    /*
+                    Vx = 123
+                    memory[I] = 1
+                    memory[I + 1] = 2
+                    memory[I + 2] = 3   
+                    */
+
+                    memory[I] = V[(opcode & 0x0F00) >> 8] / 100;
+                    memory[I + 1] = (V[(opcode & 0x0F00) >> 8] / 10) % 10;
+                    memory[I + 2] = V[(opcode & 0x0F00) >> 8] % 10;
+                }
+                    break;
+
+                case 0x0055:{
+                    // Store V0 to Vx in memory starting at address I 0xFX55
+                    for (int i = 0; i <= ((opcode & 0x0F00) >> 8); i++) {
+                        memory[I + i] = V[i];
+                    }
+                }
+                    break;
+
+                case 0x0065:{
+                    // Fill V0 to Vx with values from memory starting at address I 0xFX65
+                    for (int i = 0; i <= ((opcode & 0x0F00) >> 8); i++) {
+                        V[i] = memory[I + i];
+                    }
+                }
+                    break;
+                }
+        }
+
             break;
 
         default:
             printf("Unknown opcode: 0x%X\n", opcode);
     }
-}
+    }
 
 int setupGraphics() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -352,23 +494,21 @@ void displayGraphics() {
     SDL_RenderPresent(renderer);
 }
 
-void getInput() {
-
-    
-
-
-}
 
 
 int main(int argc, char **argv) {
    
-//TODO: Make this easier to read, split into more functions
-//TODO: Add Finish opcode implementation
-//TODO: Add input handling
-//TODO: Add sound
+//TODO: Basic function re-org
 
     loadFont();
-    loadROM("3-corax+.ch8");
+    if (argc < 2) {
+ 
+        loadROM("Tested Roms/IBM Logo.ch8");
+    }
+    else {
+        loadROM(argv[1]);
+    }
+ 
     setupGraphics();
 
     SDL_Event event;
@@ -376,14 +516,195 @@ int main(int argc, char **argv) {
 
     const int cpuHz = 500; //CHIP-8 clock speed 500Hz
     const uint32_t frameDelay = 1000 / cpuHz; // ms per instruction cycle
+    const uint32_t delayRegisterDelay = 1000 / 60; // ms per instruction cycle
 
     uint32_t lastCycleTime = SDL_GetTicks(); // Get the current time in milliseconds
+    uint32_t lastCycleTimeDelayTimer = SDL_GetTicks(); // Get the current time in milliseconds
 
     while (!quit) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                quit = 1;
+
+            switch(event.type) {
+
+                case SDL_QUIT: {
+                    quit = 1;
+                }
+                    break;
+
+                case SDL_KEYDOWN:
+                    switch(event.key.keysym.sym) {
+                        case SDLK_1: 
+                            keyboard[0x1] = 1;
+                            keyPressed = 1; 
+                            break;
+
+                        case SDLK_2: 
+                            keyboard[0x2] = 1;
+                            keyPressed = 1;
+                            break;
+
+                        case SDLK_3: 
+                            keyboard[0x3] = 1; 
+                            keyPressed = 1;
+                            break;
+
+                        case SDLK_4: 
+                            keyboard[0xC] = 1; 
+                            keyPressed = 1;
+                            break;
+
+                        case SDLK_q: 
+                            keyboard[0x4] = 1; 
+                            keyPressed = 1;
+                            break;
+
+                        case SDLK_w: 
+                            keyboard[0x5] = 1; 
+                            keyPressed = 1;
+                            break;
+
+                        case SDLK_e: 
+                            keyboard[0x6] = 1;
+                            keyPressed = 1; 
+                            break;
+
+                        case SDLK_r:
+                            keyboard[0xD] = 1;
+                            keyPressed = 1; 
+                            break;
+
+                        case SDLK_a:
+                            keyboard[0x7] = 1;
+                            keyPressed = 1; 
+                            break;
+
+                        case SDLK_s:    
+                            keyboard[0x8] = 1;
+                            keyPressed = 1; 
+                            break;  
+
+                        case SDLK_d:    
+                            keyboard[0x9] = 1;
+                            keyPressed = 1; 
+                            break;
+
+                        case SDLK_f:
+                            keyboard[0xE] = 1;
+                            keyPressed = 1; 
+                            break;
+
+                        case SDLK_z:    
+                            keyboard[0xA] = 1;
+                            keyPressed = 1; 
+                            break; 
+                        
+                        case SDLK_x:
+                            keyboard[0x0] = 1;
+                            keyPressed = 1; 
+                            break;
+                        
+                        case SDLK_c:
+                            keyboard[0xB] = 1;
+                            keyPressed = 1; 
+                            break;
+
+                        case SDLK_v:
+                            keyboard[0xF] = 1;
+                            keyPressed = 1; 
+                            break;
+
+                    }
+
+                    break;
+
+                case SDL_KEYUP:
+                    switch(event.key.keysym.sym) {
+                        case SDLK_1: 
+                            keyboard[0x1] = 0;
+                            keyPressed = 0; 
+                            break;
+
+                        case SDLK_2: 
+                            keyboard[0x2] = 0;
+                            keyPressed = 0;
+                            break;
+
+                        case SDLK_3: 
+                            keyboard[0x3] = 0; 
+                            keyPressed = 0;
+                            break;
+
+                        case SDLK_4: 
+                            keyboard[0xC] = 0; 
+                            keyPressed = 0;
+                            break;
+
+                        case SDLK_q: 
+                            keyboard[0x4] = 0; 
+                            keyPressed = 0;
+                            break;
+
+                        case SDLK_w: 
+                            keyboard[0x5] = 0; 
+                            keyPressed = 0;
+                            break;
+
+                        case SDLK_e: 
+                            keyboard[0x6] = 0;
+                            keyPressed = 0; 
+                            break;
+
+                        case SDLK_r:
+                            keyboard[0xD] = 0;
+                            keyPressed = 0; 
+                            break;
+
+                        case SDLK_a:
+                            keyboard[0x7] = 0;
+                            keyPressed = 0; 
+                            break;
+
+                        case SDLK_s:    
+                            keyboard[0x8] = 0;
+                            keyPressed = 0; 
+                            break;  
+
+                        case SDLK_d:    
+                            keyboard[0x9] = 0;
+                            keyPressed = 0; 
+                            break;
+
+                        case SDLK_f:
+                            keyboard[0xE] = 0;
+                            keyPressed = 0; 
+                            break;
+
+                        case SDLK_z:    
+                            keyboard[0xA] = 0;
+                            keyPressed = 0; 
+                            break; 
+                        
+                        case SDLK_x:
+                            keyboard[0x0] = 0;
+                            keyPressed = 0; 
+                            break;
+                        
+                        case SDLK_c:
+                            keyboard[0xB] = 0;
+                            keyPressed = 0; 
+                            break;
+
+                        case SDLK_v:
+                            keyboard[0xF] = 0;
+                            keyPressed = 0; 
+                            break;
+
+                    }
+
+                    break;
             }
+
+           
         }
         
         uint32_t currentTime = SDL_GetTicks();
@@ -394,17 +715,28 @@ int main(int argc, char **argv) {
             drawGraphics(); 
             displayGraphics();
 
-            printf("sp (post exec) is: %d\n", sp);
-
             lastCycleTime = currentTime;
         } else {
-            SDL_Delay(1); 
-        } 
+            SDL_Delay(0); 
+        }
+
+        uint32_t currentTimeDelayTimer = SDL_GetTicks();
+        uint32_t elapsedTimeDelayTimer = currentTimeDelayTimer - lastCycleTimeDelayTimer;
+
+        if(elapsedTimeDelayTimer >= delayRegisterDelay) {
+            if (delay_timer > 0) {
+                delay_timer--;
+            }
+
+            if (sound_timer > 0) {
+                sound_timer--;
+                printf("sound active\n"); //fix
+            }
+
+            lastCycleTimeDelayTimer = currentTimeDelayTimer;
+        }
 }
         
-     
-
-
 
     SDL_DestroyWindow(window);
     SDL_Quit();
