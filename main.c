@@ -16,7 +16,7 @@ uint8_t graphics[SCREEN_HEIGHT][SCREEN_WIDTH] = {0}; // 64x32 pixels on the disp
 uint16_t pc; // Program counter
 uint16_t I; // Index register
 uint8_t V[16]; // 16 general purpose registers
-uint16_t sp=0; // Stack pointer
+uint16_t sp=1; // Stack pointer
 uint16_t stack[16] = {0}; // Stack
 uint8_t memory[0x1000]; // 4KB memory
 
@@ -96,11 +96,11 @@ void executeCycle() {
                         
                     }break;
 
-            case 0x00EE: { // Return from a subroutine (pop the stack, )
+            case 0x00EE: { // Return from a subroutine (pop the stack)
 
-
-                pc = stack[sp]; // Set pc to the top of the stack
                 sp--; // Decrement stack pointer
+                pc = stack[sp]; // Set pc to the top of the stack
+                
             }
                 break;
         }
@@ -368,7 +368,7 @@ int main(int argc, char **argv) {
 //TODO: Add sound
 
     loadFont();
-    loadROM("test_opcode.ch8");
+    loadROM("3-corax+.ch8");
     setupGraphics();
 
     SDL_Event event;
