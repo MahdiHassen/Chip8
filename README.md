@@ -1,1 +1,1 @@
-Rewriting the chip8 emulator I made over the summer
+Rewrote Chip8 Emulator I made in the summer.
