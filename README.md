@@ -40,4 +40,4 @@ Pong (pong.rom)
 
 ## Building it yourself
 
-Currently, I'm pretty sure you can only build if you're on an Apple Silicon Mac with SDL2 installed via homebrew. I haven't tested it for anything other then a Apple Silicon Mac, I included the .vscode file if you want to change the build path easily.
+Currently, I'm pretty sure you can only build if you're on an Apple Silicon Mac with SDL2 installed via homebrew. I haven't tested it for anything other than a Apple Silicon Mac, I included the .vscode file if you want to change the build path easily.
