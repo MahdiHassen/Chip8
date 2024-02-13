@@ -8,12 +8,14 @@ Anyway, all the source code is contained in the main.c file. It's ~700 lines of 
 #### executeCycle():
 The bulk of the code is in the executeCylcle() function, this is where I handle the various opcodes in one giant switch case. I don't think there's a better way to handle it. The explaination of each opcode is commented beside every specific case.
 
-#### main
+#### main():
 In the main function I handle inputs (I know, I know, I should do this somewhere else), and purposly delay our fetch exectue cycle so that we run at 500Hz/0.5Mhz. Chip 8 had no set time so I just chose 500 since that's what most people used. I do the same thing for the delay and sound timers which decrements at 60hz. You can load roms by including the path when you execute the file as the second argument, e.g:
 
 ❯ ./chip8.out "Tested Roms/3-corax+.ch8"
 
 Otherwise it'll default to the IBM logo rom.
+
+Sound isn't handled, the chip8 only produces a beep when the soundTimer != 0, so I just print to console when there should be a beep.
 
 ## Screenshots
 
