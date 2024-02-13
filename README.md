@@ -17,13 +17,16 @@ Otherwise it'll default to the IBM logo rom.
 
 ## Screenshots
 
-Some screenshots of working roms, I can't test everything, but the ones in the folder have been tested
+Some screenshots of working roms, I can't test everything, but the ones in the folder have been tested:
+
 
 <img width="1096" alt="Screenshot 2024-02-12 at 11 12 33 PM" src="https://github.com/MahdiHassen/Chip8-Interperter/assets/110603934/53486626-dcdb-4cd2-8e89-4a8c257efd99">
 IBM Logo Rom (IBM logo.ch8)
 
+
 <img width="1094" alt="Screenshot 2024-02-12 at 11 15 47 PM" src="https://github.com/MahdiHassen/Chip8-Interperter/assets/110603934/89260b87-cd47-4df4-8e87-ec0b6a58a944">
 Corax Test Rom (3-corax+.ch8), used to test opcode implmentation
+
 
 <img width="1094" alt="Screenshot 2024-02-12 at 11 14 54 PM" src="https://github.com/MahdiHassen/Chip8-Interperter/assets/110603934/bfad6a60-da09-4951-872a-2a226ca4ac41">
 Pong (pong.rom)
