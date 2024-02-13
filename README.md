@@ -5,7 +5,7 @@ Originally wrote this over the summer, decided to rewrite it recently to put it 
 ## Brief Code Explaination
 Anyway, all the source code is contained in the main.c file. It's ~700 lines of code, I suggest you download and open it in a code editor like VsCode so you're able to minimize functions, and switch cases that occupy a bunch of space. 
 
-The chip8 has access to 4KB of memory, 16 8-bit registers, a stack (for subroutines) and an Index register. Each instruction is exaclt the same length, represented by 0xABCD in hex, so we incrememnt our program counter by 2 every instruction. Chip8 roms are just a bunch of Opcodes that we load into memory and increment through.
+The chip8 has access to 4KB of memory, 16 8-bit registers, a stack (for subroutines) and an Index register. Each instruction is exactly the same length, represented by 0xABCD in hex, so we incrememnt our program counter by 2 every instruction. Chip8 roms are just a bunch of Opcodes that we load into memory and increment through.
 
 #### executeCycle():
 The bulk of the code is in the executeCylcle() function, this is where I handle the various opcodes in one giant switch case. I don't think there's a better way to handle it. The explaination of each opcode is commented beside every specific case.
