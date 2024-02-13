@@ -32,3 +32,8 @@ Corax Test Rom (3-corax+.ch8), used to test opcode implmentation
 
 <img width="1094" alt="Screenshot 2024-02-12 at 11 14 54 PM" src="https://github.com/MahdiHassen/Chip8-Interperter/assets/110603934/bfad6a60-da09-4951-872a-2a226ca4ac41">
 Pong (pong.rom)
+
+
+## Building it yourself
+
+Currently, I'm pretty sure you can only build if you're on an Apple Silicon Mac with SDL2 installed via homebrew. It could work on intel macs too (the links are included in the .vscode file) but I haven't tested it for anything other then my Apple Silicon Mac.
