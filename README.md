@@ -1,6 +1,6 @@
-# Chip8 Interperter/Emulator with C and SDL2
-
 <img width="1096" alt="Screenshot 2024-02-12 at 11 12 33 PM" src="https://github.com/MahdiHassen/Chip8-Interperter/assets/110603934/53486626-dcdb-4cd2-8e89-4a8c257efd99">
+
+# Chip8 Interperter/Emulator with C and SDL2
 
 Originally wrote this over the summer, decided to rewrite it recently to put it on Github. Rewriting this actually gives me some motivation to begin my Gameboy emulator that I've been putting off. 
 
